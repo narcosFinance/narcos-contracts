@@ -31,6 +31,15 @@ contract NarcosToken is BEP20 {
 
     constructor(string memory _name, string memory _alias) BEP20(_name, _alias) public {
         moderator = msg.sender;
+    }
+
+    modifier onlyMod() {
+        require(moderator == msg.sender, "Must be mod");
+        _;
+    }
+
+    function createLPS() external {
+        require(lpBUSD == address(0), "!lps");
         IFactory(factory).createPair(address(this), busd);
         IFactory(factory).createPair(address(this), wbnb);        
         lpBUSD = IFactory(factory).getPair(address(this), busd);
@@ -38,11 +47,6 @@ contract NarcosToken is BEP20 {
         paused = false;
         lastGrillTimeBUSD = now;
         lastGrillTimeWBNB = now;
-    }
-
-    modifier onlyMod() {
-        require(moderator == msg.sender, "Must be mod");
-        _;
     }
 
     function changeMod(address _addr) public {
