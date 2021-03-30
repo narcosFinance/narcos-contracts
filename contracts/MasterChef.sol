@@ -67,6 +67,7 @@ contract MasterChef is Ownable {
     address public moderator;
     address[] public pathToken;
     mapping(address => address[]) public pathTokenStrategy;
+    mapping(address => address[]) public pathTokenStrategySell;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
@@ -421,6 +422,10 @@ contract MasterChef is Ownable {
         pathTokenStrategy[_token] = _path;
     }
 
+    function setPathTokenStrategySell(address _token, address[] calldata _path) onlyMod external {
+        pathTokenStrategySell[_token] = _path;
+    }
+
     function setPathToken(address[] calldata _path) onlyMod external {
         pathToken = _path;
     }    
@@ -441,6 +446,15 @@ contract MasterChef is Ownable {
             _paths[i] = pathTokenStrategy[_token][i];
         }
         return _paths;
-    }    
+    }
+
+    function getPathTokenStrategySell(address _token) public view returns(address[] memory) {
+        uint256 _length =  pathTokenStrategySell[_token].length;
+        address[] memory _paths = new address[](_length);
+        for (uint256 i = 0; i < _length; i++) {
+            _paths[i] = pathTokenStrategySell[_token][i];
+        }
+        return _paths;
+    }
 
 }

@@ -27,4 +27,6 @@ interface ISChef {
     
     function getPathTokenStrategy(address _token) external view returns(address[] memory);
 
+    function getPathTokenStrategySell(address _token) external view returns(address[] memory);
+
 }
